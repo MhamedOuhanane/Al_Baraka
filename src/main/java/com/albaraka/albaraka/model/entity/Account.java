@@ -4,6 +4,7 @@ import com.albaraka.albaraka.model.enums.UserStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class Account {
@@ -12,4 +13,5 @@ public class Account {
     private String accountNumber;
     private BigDecimal balance;
     private User user;
+    private List<Operation> operations;
 }
