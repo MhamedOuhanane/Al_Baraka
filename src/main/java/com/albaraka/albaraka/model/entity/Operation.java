@@ -2,20 +2,56 @@ package com.albaraka.albaraka.model.entity;
 
 import com.albaraka.albaraka.model.enums.OperationStatus;
 import com.albaraka.albaraka.model.enums.OperationType;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name = "operations")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Operation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(columnDefinition = "uuid", nullable = false, unique = true, updatable = false)
+    @EqualsAndHashCode.Include
     private UUID uuid;
-    private OperationType type;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OperationType type = OperationType.DEPOSIT;
+
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
-    private OperationStatus status;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OperationStatus status = OperationStatus.PENDING;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "validated_at", nullable = false)
     private LocalDateTime validatedAt;
+
+    @Column(name = "executed_at", nullable = false)
     private LocalDateTime executedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
+
+    @OneToOne(mappedBy = "operation", fetch = FetchType.LAZY)
     private Document document;
 }

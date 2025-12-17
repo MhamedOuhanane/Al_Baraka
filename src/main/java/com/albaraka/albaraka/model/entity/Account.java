@@ -1,17 +1,41 @@
 package com.albaraka.albaraka.model.entity;
 
-import com.albaraka.albaraka.model.enums.UserStatus;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "roles")
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(columnDefinition = "uuid", nullable = false, unique = true, updatable = false)
+    @EqualsAndHashCode.Include
     private UUID uuid;
+
+    @Column(name = "account_number", nullable = false)
     private String accountNumber;
+
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal balance;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    private List<Operation> operations;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private List<Operation> operations = new ArrayList<>();
 }
