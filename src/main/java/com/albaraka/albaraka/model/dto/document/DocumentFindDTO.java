@@ -1,11 +1,8 @@
 package com.albaraka.albaraka.model.dto.document;
 
-import com.albaraka.albaraka.model.dto.account.AccountDTO;
-import com.albaraka.albaraka.model.enums.OperationStatus;
-import com.albaraka.albaraka.model.enums.OperationType;
+import com.albaraka.albaraka.model.dto.operation.OperationFindDTO;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,9 +12,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class DocumentDTO {
+public class DocumentFindDTO {
     private UUID uuid;
     private String fileName;
     private String fileType;
     private String storagePath;
+    private LocalDateTime uploadedAt;
+    private OperationFindDTO operation;
 }

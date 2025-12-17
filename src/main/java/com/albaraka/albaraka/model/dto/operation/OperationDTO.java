@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class OperationFinDTO {
+public class OperationDTO {
     private UUID uuid;
     private String fullName;
     private OperationType type;
