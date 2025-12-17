@@ -2,11 +2,8 @@ package com.albaraka.albaraka.model.dto.operation;
 
 import com.albaraka.albaraka.model.dto.account.AccountDTO;
 import com.albaraka.albaraka.model.dto.document.DocumentDTO;
-import com.albaraka.albaraka.model.entity.Account;
-import com.albaraka.albaraka.model.entity.Document;
 import com.albaraka.albaraka.model.enums.OperationStatus;
 import com.albaraka.albaraka.model.enums.OperationType;
-import com.albaraka.albaraka.model.enums.UserStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -19,16 +16,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class OperationDTO {
-    private UUID uuid;
+public class OperationCreateDTO {
     private OperationType type;
     private BigDecimal amount;
-    private OperationStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime validatedAt;
-    private LocalDateTime executedAt;
-    private AccountDTO accountSource;
-    private AccountDTO accountDestination;
-    private DocumentDTO document;
-
+    private UUID accountSourceUuid;
+    private UUID accountDestinationUuid;
+    private UUID documentUuid;
 }

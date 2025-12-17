@@ -36,6 +36,11 @@ public class Account {
     private User user;
 
     @Builder.Default
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private List<Operation> operations = new ArrayList<>();
+    @OneToMany(mappedBy = "accountSource", fetch = FetchType.LAZY)
+    private List<Operation> operationsSource = new ArrayList<>();
+
+
+    @Builder.Default
+    @OneToMany(mappedBy = "accountDestination", fetch = FetchType.LAZY)
+    private List<Operation> operationsDestination = new ArrayList<>();
 }

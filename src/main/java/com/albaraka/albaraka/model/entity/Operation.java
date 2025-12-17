@@ -50,7 +50,12 @@ public class Operation {
     private LocalDateTime executedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Account account;
+    @JoinColumn(name = "account_source_id")
+    private Account accountSource;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_destination_id")
+    private Account accountDestination;
 
     @OneToOne(mappedBy = "operation", fetch = FetchType.LAZY)
     private Document document;
