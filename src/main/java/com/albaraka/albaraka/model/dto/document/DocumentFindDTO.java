@@ -1,5 +1,6 @@
 package com.albaraka.albaraka.model.dto.document;
 
+import com.albaraka.albaraka.model.dto.operation.OperationDTO;
 import com.albaraka.albaraka.model.dto.operation.OperationFindDTO;
 import lombok.*;
 
@@ -18,5 +19,5 @@ public class DocumentFindDTO {
     private String fileType;
     private String storagePath;
     private LocalDateTime uploadedAt;
-    private OperationFindDTO operation;
+    private OperationDTO operation;
 }

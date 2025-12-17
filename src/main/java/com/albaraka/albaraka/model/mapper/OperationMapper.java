@@ -6,7 +6,7 @@ import com.albaraka.albaraka.model.entity.Operation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {AccountMapper.class})
+@Mapper(componentModel = "spring", uses = {AccountMapper.class, DocumentMapper.class})
 public interface OperationMapper {
     @Mapping(source = "accountSource.user.fullName", target = "fullName")
     OperationDTO toDto(Operation operation);
