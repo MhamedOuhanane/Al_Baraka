@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class LoginRequestDTO {
-    private String username;
+    private String email;
     private String password;
-    private String confirmPassword;
 }

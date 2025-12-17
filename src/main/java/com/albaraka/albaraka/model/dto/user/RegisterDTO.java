@@ -1,7 +1,5 @@
 package com.albaraka.albaraka.model.dto.user;
 
-import com.albaraka.albaraka.model.entity.Account;
-import com.albaraka.albaraka.model.entity.Role;
 import com.albaraka.albaraka.model.enums.UserStatus;
 import lombok.*;
 
@@ -14,11 +12,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class UserDTO {
-    private UUID uuid;
+public class RegisterDTO {
     private String fullName;
     private String email;
+    private String password;
+    private String confirmPassword;
     private UserStatus status;
-    private LocalDateTime createdAt;
     private String role;
 }
