@@ -17,4 +17,5 @@ public class Operation {
     private LocalDateTime validatedAt;
     private LocalDateTime executedAt;
     private Account account;
+    private Document document;
 }
