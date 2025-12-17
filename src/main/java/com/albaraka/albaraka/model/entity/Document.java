@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "documents")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,4 +39,11 @@ public class Document {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "operation_id", nullable = false)
     private Operation operation;
+
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 }

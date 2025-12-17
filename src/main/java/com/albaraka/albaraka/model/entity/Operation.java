@@ -59,4 +59,11 @@ public class Operation {
 
     @OneToOne(mappedBy = "operation", fetch = FetchType.LAZY)
     private Document document;
+
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 }

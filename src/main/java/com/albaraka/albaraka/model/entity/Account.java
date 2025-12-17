@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "accounts")
 @Getter
 @Setter
 @Builder
@@ -43,4 +43,11 @@ public class Account {
     @Builder.Default
     @OneToMany(mappedBy = "accountDestination", fetch = FetchType.LAZY)
     private List<Operation> operationsDestination = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 }
