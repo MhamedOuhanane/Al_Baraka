@@ -1,5 +1,6 @@
 package com.albaraka.albaraka.exception;
 
+import com.albaraka.albaraka.exception.general.*;
 import com.albaraka.albaraka.model.dto.error.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -86,5 +87,20 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<ErrorResponse<String>> handleFileStorage(
+            InvalidRequestException exception,
+            HttpServletRequest request
+    ) {
+        ErrorResponse<String> error = ErrorResponse.<String>builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error("FILE_STORAGE_ERROR")
+                .message(exception.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

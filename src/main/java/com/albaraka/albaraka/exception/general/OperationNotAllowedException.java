@@ -1,4 +1,4 @@
-package com.albaraka.albaraka.exception;
+package com.albaraka.albaraka.exception.general;
 
 public class OperationNotAllowedException extends RuntimeException {
     public OperationNotAllowedException(String message) {
