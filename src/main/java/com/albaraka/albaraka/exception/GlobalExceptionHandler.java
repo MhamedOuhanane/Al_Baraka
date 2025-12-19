@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OperationNotAllowedException.class)
     public ResponseEntity<ErrorResponse<String>> handleOperationNotAllowed(
-            InvalidRequestException exception,
+            OperationNotAllowedException exception,
             HttpServletRequest request
     ) {
         ErrorResponse<String> error = ErrorResponse.<String>builder()
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse<String>> handleAuthentication(
-            InvalidRequestException exception,
+            AuthenticationException exception,
             HttpServletRequest request
     ) {
         ErrorResponse<String> error = ErrorResponse.<String>builder()
@@ -105,7 +105,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<ErrorResponse<String>> handleAuthorization(
-            InvalidRequestException exception,
+            AuthorizationException exception,
             HttpServletRequest request
     ) {
         ErrorResponse<String> error = ErrorResponse.<String>builder()
@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse<String>> handleConflict(
-            InvalidRequestException exception,
+            ConflictException exception,
             HttpServletRequest request
     ) {
         ErrorResponse<String> error = ErrorResponse.<String>builder()
@@ -135,7 +135,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FileStorageException.class)
     public ResponseEntity<ErrorResponse<String>> handleFileStorage(
-            InvalidRequestException exception,
+            FileStorageException exception,
             HttpServletRequest request
     ) {
         ErrorResponse<String> error = ErrorResponse.<String>builder()
