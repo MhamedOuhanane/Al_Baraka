@@ -12,6 +12,6 @@ import java.util.UUID;
 
 public interface OperationRepository extends JpaRepository<Operation, UUID> {
     Optional<Operation> findByUuid(UUID uuid);
-    List<Operation> findByStatusAndByType(OperationStatus status, OperationType type);
-    List<Operation> findByAccount(Account account);
+    List<Operation> findByStatusAndType(OperationStatus status, OperationType type);
+    List<Operation> findByAccountSource(Account account);
 }

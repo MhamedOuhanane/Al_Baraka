@@ -19,5 +19,4 @@ public class DocumentFindDTO {
     private String fileType;
     private String storagePath;
     private LocalDateTime uploadedAt;
-    private OperationDTO operation;
 }

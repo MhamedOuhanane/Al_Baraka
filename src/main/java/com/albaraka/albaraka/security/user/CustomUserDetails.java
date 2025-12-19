@@ -16,7 +16,7 @@ public class CustomUserDetails extends org.springframework.security.core.userdet
         super(
                 user.getEmail(),
                 user.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()))
+                List.of(new SimpleGrantedAuthority(user.getRole().getName()))
         );
         uuid = user.getUuid();
     }

@@ -31,7 +31,7 @@ public class RegisterDTO {
     @NotBlank(message = "La confirmation du mot de passe est obligatoire")
     private String confirmPassword;
 
-    @NotBlank(message = "Le rôle est obligatoire")
+//    @NotBlank(message = "Le rôle est obligatoire")
     private String role;
 }
 

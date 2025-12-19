@@ -9,7 +9,7 @@ import com.albaraka.albaraka.model.entity.Operation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {OperationMapper.class})
+@Mapper(componentModel = "spring")
 public interface DocumentMapper {
     DocumentDTO toDto(Document document);
     DocumentFindDTO toFindDto(Document document);

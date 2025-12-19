@@ -27,6 +27,7 @@ public class Operation {
     @EqualsAndHashCode.Include
     private UUID uuid;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OperationType type = OperationType.DEPOSIT;
