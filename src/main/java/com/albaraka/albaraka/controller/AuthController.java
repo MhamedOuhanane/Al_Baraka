@@ -1,5 +1,6 @@
 package com.albaraka.albaraka.controller;
 
+import com.albaraka.albaraka.model.dto.user.LoginRequestDTO;
 import com.albaraka.albaraka.model.dto.user.RegisterDTO;
 import com.albaraka.albaraka.service.interfaces.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,8 +30,26 @@ public class AuthController {
 
         var body = Map.of(
                 "date", LocalDateTime.now(),
-                "status", 200,
+                "status", 201,
                 "message", "Votre Compte est cree avec success",
+                "data", result,
+                "path", req.getRequestURI()
+        );
+
+        return ResponseEntity.ok(body);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+            @Valid @RequestBody LoginRequestDTO dto,
+            HttpServletRequest req
+    ) {
+        var result = service.login(dto);
+
+        var body = Map.of(
+                "date", LocalDateTime.now(),
+                "status", 200,
+                "message", "Connexion réussie",
                 "data", result,
                 "path", req.getRequestURI()
         );
