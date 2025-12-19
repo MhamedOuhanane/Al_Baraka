@@ -12,7 +12,6 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class LoginDTO {
     private UUID uuid;
-    private String fullName;
     private String role;
     private String accessToken;
 }
