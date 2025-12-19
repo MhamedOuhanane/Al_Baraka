@@ -4,7 +4,7 @@ import com.albaraka.albaraka.security.user.CustomUserDetails;
 import com.albaraka.albaraka.service.impl.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,7 +26,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
 
         if (!passwordEncoder.matches(password, userDetails.getPassword()))
-            throw new CredentialsExpiredException("Nom d'utilisateur ou mot de passe incorrect");
+            throw new BadCredentialsException("Nom d'utilisateur ou mot de passe incorrect");
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails,

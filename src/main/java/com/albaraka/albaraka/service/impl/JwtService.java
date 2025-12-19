@@ -44,9 +44,9 @@ public class JwtService {
                 .getBody();
     }
 
-    public boolean parseClaimsJws(String token) {
+    public boolean isTokenValid(String token) {
         try {
-            extractAllClaims(token);
+            Claims claims = extractAllClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
