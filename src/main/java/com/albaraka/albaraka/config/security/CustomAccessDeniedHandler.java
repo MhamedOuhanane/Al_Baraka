@@ -9,11 +9,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+@Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+    private final ObjectMapper mapper;
+
+    public CustomAccessDeniedHandler() {
+        this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    }
+
     @Override
     public void handle(
             HttpServletRequest request,
@@ -31,8 +39,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 .path(request.getRequestURI())
                 .build();
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
         response.getWriter().write(mapper.writeValueAsString(error));
     }
 }
