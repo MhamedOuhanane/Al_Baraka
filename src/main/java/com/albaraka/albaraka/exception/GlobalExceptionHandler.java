@@ -118,6 +118,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse<String>> handleConflict(
+            InvalidRequestException exception,
+            HttpServletRequest request
+    ) {
+        ErrorResponse<String> error = ErrorResponse.<String>builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error("CONFLICT")
+                .message(exception.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
     @ExceptionHandler(FileStorageException.class)
     public ResponseEntity<ErrorResponse<String>> handleFileStorage(
             InvalidRequestException exception,
