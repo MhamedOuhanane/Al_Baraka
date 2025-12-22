@@ -1,5 +1,6 @@
 package com.albaraka.albaraka.service.impl;
 
+import com.albaraka.albaraka.model.entity.User;
 import com.albaraka.albaraka.security.user.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -26,11 +27,11 @@ public class JwtService {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String generateToken(CustomUserDetails userDetails) {
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim("uuid", userDetails.getUuid())
-                .claim("role", userDetails.getAuthorities().iterator().next().getAuthority())
+                .setSubject(user.getEmail())
+                .claim("uuid", user.getUuid())
+                .claim("role", user.getRole().getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)

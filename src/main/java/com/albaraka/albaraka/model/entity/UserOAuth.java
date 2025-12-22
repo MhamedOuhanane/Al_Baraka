@@ -6,9 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Table(name = "user_oauth")
+@Table(name = "user_oauths")
 @Getter
 @Setter
 @Builder
@@ -19,6 +20,10 @@ public class UserOAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(columnDefinition = "uuid", nullable = false, unique = true, updatable = false)
+    @EqualsAndHashCode.Include
+    private UUID uuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

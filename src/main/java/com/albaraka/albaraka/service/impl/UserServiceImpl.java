@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CustomUserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
@@ -61,14 +60,15 @@ public class UserServiceImpl implements UserService {
                 )
         );
 
-        CustomUserDetails userDetails =
-                (CustomUserDetails) userDetailsService
-                        .loadUserByUsername(dto.getEmail());
+        User user = repository.findByEmail(dto.getEmail())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "L'utilisateur avec l'email '" + dto.getEmail() + "' n'existe pas !"
+                        ));
 
         return LoginDTO.builder()
-                .uuid(userDetails.getUuid())
-                .role(userDetails.getAuthorities().iterator().next().getAuthority())
-                .accessToken(jwtService.generateToken(userDetails))
+                .uuid(user.getUuid())
+                .role(user.getRole().getName())
+                .accessToken(jwtService.generateToken(user))
                 .build();
     }
 }

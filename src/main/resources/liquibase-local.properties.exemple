@@ -3,3 +3,8 @@ url=jdbc:postgresql://localhost:5432/desertakal_db
 username=postgres
 password=password
 driver=org.postgresql.Driver
+
+
+spring.security.oauth2.client.registration.google.client-id=
+spring.security.oauth2.client.registration.google.client-secret=
+spring.security.oauth2.client.registration.google.scope=

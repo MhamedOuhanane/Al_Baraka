@@ -7,7 +7,8 @@ public enum OauthProvider {
 
     LOCAL("Email & Password"),
     GOOGLE("Google Account"),
-    FACEBOOK("Facebook Account");
+    FACEBOOK("Facebook Account"),
+    GITHUB("GitHub Account");
 
     private final String descr;
 
