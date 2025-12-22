@@ -53,6 +53,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Account> accounts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    protected List<UserOAuth> oAuths;
+
     @PrePersist
     public void prePersist() {
         if (uuid == null) {

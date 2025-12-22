@@ -13,5 +13,9 @@ import org.mapstruct.Mapping;
 public interface DocumentMapper {
     DocumentDTO toDto(Document document);
     DocumentFindDTO toFindDto(Document document);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uploadedAt", ignore = true)
+    @Mapping(target = "operation", ignore = true)
     Document toEntity(DocumentDTO dto);
 }

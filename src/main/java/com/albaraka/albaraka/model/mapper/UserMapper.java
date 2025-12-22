@@ -11,6 +11,12 @@ public interface UserMapper {
     @Mapping(source = "role.name", target = "role")
     UserDTO toDto(User user);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "accounts", ignore = true)
+    @Mapping(target = "oAuths", ignore = true)
     @Mapping(target = "role", ignore = true)
     User toEntity(RegisterDTO dto);
 }

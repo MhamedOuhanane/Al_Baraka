@@ -15,5 +15,11 @@ public interface AccountMapper {
     @Mapping(source = "user.email", target = "email")
     AccountDTO toDto(Account account);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "accountNumber", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "operationsSource", ignore = true)
+    @Mapping(target = "operationsDestination", ignore = true)
     Account toEntity(AccountCreateDTO dto);
 }
