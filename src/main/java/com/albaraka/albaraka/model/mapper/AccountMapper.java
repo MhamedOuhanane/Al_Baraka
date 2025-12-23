@@ -9,6 +9,8 @@ import com.albaraka.albaraka.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
     @Mapping(source = "user.fullName", target = "fullName")
@@ -22,4 +24,7 @@ public interface AccountMapper {
     @Mapping(target = "operationsSource", ignore = true)
     @Mapping(target = "operationsDestination", ignore = true)
     Account toEntity(AccountCreateDTO dto);
+
+
+    List<AccountDTO> toDtos(List<Account> accounts);
 }
