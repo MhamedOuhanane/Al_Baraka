@@ -5,7 +5,10 @@ import com.albaraka.albaraka.model.dto.user.LoginRequestDTO;
 import com.albaraka.albaraka.model.dto.user.RegisterDTO;
 import com.albaraka.albaraka.model.dto.user.UserDTO;
 
+import java.util.List;
+
 public interface UserService {
     UserDTO register(RegisterDTO dto);
     LoginDTO login(LoginRequestDTO dto);
+    List<UserDTO> findAll();
 }

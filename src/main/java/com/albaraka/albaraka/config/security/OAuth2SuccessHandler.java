@@ -1,6 +1,7 @@
 package com.albaraka.albaraka.config.security;
 
 import com.albaraka.albaraka.model.dto.user.LoginDTO;
+import com.albaraka.albaraka.model.entity.Role;
 import com.albaraka.albaraka.model.entity.User;
 import com.albaraka.albaraka.model.entity.UserOAuth;
 import com.albaraka.albaraka.model.enums.OauthProvider;
@@ -23,17 +24,16 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
+    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final UserOAuthRepository userOAuthRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
@@ -51,52 +51,53 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         OauthProvider provider;
 
         if (registrationId.equalsIgnoreCase("google")) {
-            provider = OauthProvider.GOOGLE;
             OidcUser oidcUser = (OidcUser) authToken.getPrincipal();
 
             providerId = oidcUser.getSubject();
             email = oidcUser.getEmail();
+            provider = OauthProvider.GOOGLE;
             fullName = oidcUser.getFullName();
         } else {
-            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            OAuth2User oAuth2User = (OAuth2User) authToken.getPrincipal();
 
             providerId = oAuth2User.getAttribute("id");
-            email = oAuth2User.getAttribute("email");
             fullName = oAuth2User.getAttribute("name");
+            email = oAuth2User.getAttribute("email");
 
-            switch (registrationId.toLowerCase()){
+            switch (registrationId.toLowerCase()) {
                 case "facebook" -> provider = OauthProvider.FACEBOOK;
-                default -> throw new BadRequestException(
-                        "Fournisseur OAuth non pris en charge: " + registrationId
-                );
+                default -> throw new BadRequestException("Provider n'exist");
             }
         }
 
+        Role role = roleRepository.findByName("ROLE_CLIENT").orElse(null);
         User user = userRepository.findByEmail(email).orElseGet( () ->
-                userRepository.save(User.builder()
+                userRepository.save(
+                        User.builder()
+                                .uuid(UUID.randomUUID())
+                                .role(role)
                                 .email(email)
                                 .fullName(fullName)
                                 .password(passwordEncoder.encode(UUID.randomUUID().toString()))
-                                .role(roleRepository.findByName("ROLE_CLIENT").orElse(null))
                                 .build()
                 )
         );
 
-        if (userOAuthRepository.findByUserAndProvider(user, provider).isEmpty())
+        if(userOAuthRepository.findByUserAndProvider(user, provider).isEmpty()) {
             userOAuthRepository.save(
                     UserOAuth.builder()
                             .uuid(UUID.randomUUID())
-                            .user(user)
-                            .provider(provider)
                             .providerId(providerId)
+                            .provider(provider)
+                            .user(user)
                             .build()
             );
-
+        }
 
         String accessToken = jwtService.generateToken(user);
         LoginDTO login = LoginDTO.builder()
                 .uuid(user.getUuid())
-                .role(user.getRole().getName())
+                .role("ROLE_CLIENT")
                 .accessToken(accessToken)
                 .build();
 
@@ -104,3 +105,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.getWriter().write(mapper.writeValueAsString(login));
     }
 }
+
+
+
+

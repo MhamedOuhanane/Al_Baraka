@@ -6,6 +6,8 @@ import com.albaraka.albaraka.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     @Mapping(source = "role.name", target = "role")
@@ -19,4 +21,6 @@ public interface UserMapper {
     @Mapping(target = "oAuths", ignore = true)
     @Mapping(target = "role", ignore = true)
     User toEntity(RegisterDTO dto);
+
+    List<UserDTO> toDtos(List<User> users);
 }

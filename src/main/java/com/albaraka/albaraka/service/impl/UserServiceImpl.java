@@ -19,6 +19,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -70,5 +73,14 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole().getName())
                 .accessToken(jwtService.generateToken(user))
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDTO> findAll() {
+        List<User> users =  repository.findAll().stream()
+                .peek(User::getRole).toList();
+
+        return mapper.toDtos(users);
     }
 }
