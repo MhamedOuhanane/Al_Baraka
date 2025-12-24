@@ -44,10 +44,10 @@ public class Operation {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "validated_at", nullable = false)
+    @Column(name = "validated_at")
     private LocalDateTime validatedAt;
 
-    @Column(name = "executed_at", nullable = false)
+    @Column(name = "executed_at")
     private LocalDateTime executedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
