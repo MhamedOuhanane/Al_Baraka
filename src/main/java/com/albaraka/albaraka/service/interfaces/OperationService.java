@@ -12,4 +12,5 @@ public interface OperationService {
     OperationFindDTO create(OperationCreateDTO dto);
     OperationFindDTO updateStatus(UUID uuid, OperationStatus status);
     List<OperationDTO> findAll();
+    List<OperationDTO> findAllByClient(UUID uuid);
 }

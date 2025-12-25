@@ -6,10 +6,12 @@ import com.albaraka.albaraka.model.dto.operation.OperationDTO;
 import com.albaraka.albaraka.model.dto.operation.OperationFindDTO;
 import com.albaraka.albaraka.model.entity.Account;
 import com.albaraka.albaraka.model.entity.Operation;
+import com.albaraka.albaraka.model.entity.User;
 import com.albaraka.albaraka.model.enums.OperationStatus;
 import com.albaraka.albaraka.model.mapper.OperationMapper;
 import com.albaraka.albaraka.repository.AccountRepository;
 import com.albaraka.albaraka.repository.OperationRepository;
+import com.albaraka.albaraka.repository.UserRepository;
 import com.albaraka.albaraka.service.interfaces.OperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class OperationServiceImpl implements OperationService {
     private final OperationRepository repository;
     private final OperationMapper mapper;
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     @Override
@@ -74,6 +77,18 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public List<OperationDTO> findAll() {
         List<Operation> operations = repository.findAll();
+
+        return mapper.toDtos(operations);
+    }
+
+    @Override
+    public List<OperationDTO> findAllByClient(UUID uuid) {
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Le client avec l'uuid '" + uuid + "' n'existe pas !"
+                ));
+
+        var operations = repository.findByUserWithDetails(user);
 
         return mapper.toDtos(operations);
     }
