@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+.env
+minio_data/
 src/main/resources/application-local.properties
 
 ### STS ###
