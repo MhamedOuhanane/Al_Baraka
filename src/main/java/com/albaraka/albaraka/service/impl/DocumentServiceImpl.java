@@ -37,7 +37,7 @@ public class DocumentServiceImpl implements DocumentService {
                 ));
 
         if (!ownerUuid.equals(operation.getAccountSource().getUser().getUuid())) {
-            throw new AuthorizationException("Vous n'avez pas لautorisation d'ajouter un document à cette opération !");
+            throw new AuthorizationException("Vous n'avez pas autorisation d'ajouter un document à cette opération !");
         }
 
         Document document = Document.builder()
