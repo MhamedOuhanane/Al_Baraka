@@ -7,10 +7,13 @@ import io.minio.errors.*;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class FileStorageServiceImp implements FileStorageService {
     public String uploadDocument(MultipartFile file, UUID documentUuid, UUID ownerUuid) {
         try {
             String extension = getFileExtension(file.getOriginalFilename());
-            String objectName = String.format("private/documents/%s/%s.%s",
+            String objectName = String.format("private/documents/%s/%s%s",
                     ownerUuid.toString(),
                     documentUuid.toString(),
                     extension);
@@ -48,7 +51,7 @@ public class FileStorageServiceImp implements FileStorageService {
     }
 
     @Override
-    public String getDocumentUrl(String filePath, UUID ownerUuid, String role) {
+    public InputStreamResource getFileAsResource(String filePath, UUID ownerUuid, String role) {
         boolean isAdminOrAgent = role.equals("ROLE_ADMIN") || role.equals("ROLE_AGENT");
 
         if (!isAdminOrAgent) {
@@ -58,18 +61,19 @@ public class FileStorageServiceImp implements FileStorageService {
                 throw new FileStorageException("Le chemin d'accès au fichier est invalide");
 
             UUID currentOwnerUuid = UUID.fromString(pathParts[2]);
-            if (!UUID.randomUUID().equals(currentOwnerUuid))
+            if (!ownerUuid.equals(currentOwnerUuid))
                 throw new FileStorageException("Accès refusé : ce fichier ne vous appartient pas");
         }
 
         try {
-            return minioClient.getPresignedObjectUrl(
-                    GetPresignedObjectUrlArgs.builder()
-                            .method(Method.GET)
+            InputStream stream = minioClient.getObject(
+                    GetObjectArgs.builder()
                             .bucket(bucketName)
                             .object(filePath)
                             .build()
             );
+
+            return new InputStreamResource(stream);
         } catch (Exception e) {
             throw new FileStorageException("Erreur lors de la génération du lien: " + e.getMessage());
         }
@@ -78,6 +82,6 @@ public class FileStorageServiceImp implements FileStorageService {
 
     public String getFileExtension(String fileName) {
         return (fileName != null && fileName.contains("."))
-                ? fileName.substring(fileName.lastIndexOf(".")) : "bin";
+                ? fileName.substring(fileName.lastIndexOf(".")) : ".bin";
     }
 }

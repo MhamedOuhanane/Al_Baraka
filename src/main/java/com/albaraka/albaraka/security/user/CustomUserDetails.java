@@ -12,6 +12,8 @@ import java.util.UUID;
 @Setter
 public class CustomUserDetails extends org.springframework.security.core.userdetails.User {
     private UUID uuid;
+    private String role;
+
     public CustomUserDetails(User user) {
         super(
                 user.getEmail(),
@@ -19,5 +21,6 @@ public class CustomUserDetails extends org.springframework.security.core.userdet
                 List.of(new SimpleGrantedAuthority(user.getRole().getName()))
         );
         uuid = user.getUuid();
+        role = user.getRole().getName();
     }
 }

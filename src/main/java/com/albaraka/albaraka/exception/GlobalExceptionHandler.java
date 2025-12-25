@@ -149,12 +149,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse<String>> handleGlobalException(HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse<String>> handleGlobalException(Exception ex, HttpServletRequest request) {
         ErrorResponse<String> errorResponse = ErrorResponse.<String>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .message("An internal error has occurred.")
+                .message("An internal error has occurred." + ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
