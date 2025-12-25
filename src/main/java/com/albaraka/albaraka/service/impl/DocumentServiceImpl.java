@@ -36,7 +36,7 @@ public class DocumentServiceImpl implements DocumentService {
                         "L'operation avec l'uuid '" + dto.getOperationUuid() + "' n'existe pas !"
                 ));
 
-        if (!ownerUuid.equals(operation.getAccountSource().getUser().getUuid())) {
+        if (!ownerUuid.equals(operation.getAccountDestination().getUser().getUuid())) {
             throw new AuthorizationException("Vous n'avez pas autorisation d'ajouter un document à cette opération !");
         }
 
@@ -70,7 +70,7 @@ public class DocumentServiceImpl implements DocumentService {
                         "La document avec l'uuid '" + uuid + "' n'existe pas !"
                 ));
 
-        var user = document.getOperation().getAccountSource().getUser();
+        var user = document.getOperation().getAccountDestination().getUser();
 
         return mapper.toFindDto(document);
     }

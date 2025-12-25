@@ -19,9 +19,9 @@ public interface OperationRepository extends JpaRepository<Operation, UUID> {
     List<Operation> findByAccountSource(Account account);
 
     @Query("""
-        SELECT o FROM Operation o 
-        JOIN FETCH o.accountSource acc 
-        JOIN FETCH acc.user u 
+        SELECT o FROM Operation o
+        JOIN FETCH o.accountDestination acc
+        JOIN FETCH acc.user u
         WHERE u = :user
     """)
     List<Operation> findByUserWithDetails(@Param("user") User user);

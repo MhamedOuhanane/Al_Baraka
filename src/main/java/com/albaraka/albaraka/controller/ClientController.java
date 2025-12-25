@@ -39,12 +39,14 @@ public class ClientController {
         );
     }
 
-    @PostMapping("/operations")
+    @PostMapping("/{uuid}/operations")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<?> createOperation(
             @Valid @RequestBody OperationCreateDTO dto,
+            @PathVariable("uuid") UUID uuid,
             HttpServletRequest request
     ) {
+        dto.setAccountDestinationUuid(uuid);
         var operation = operationService.create(dto);
 
         return ResponseEntity.ok(
@@ -60,7 +62,7 @@ public class ClientController {
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<?> createDocument(
             @PathVariable("uuid") UUID uuid,
-            @Valid @RequestBody DocumentCreateDTO dto,
+            @Valid @ModelAttribute DocumentCreateDTO dto,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam("file") MultipartFile file,
             HttpServletRequest request

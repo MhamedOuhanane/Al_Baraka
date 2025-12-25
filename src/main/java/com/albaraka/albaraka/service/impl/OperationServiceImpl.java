@@ -1,5 +1,6 @@
 package com.albaraka.albaraka.service.impl;
 
+import com.albaraka.albaraka.exception.generic.InvalidRequestException;
 import com.albaraka.albaraka.exception.generic.ResourceNotFoundException;
 import com.albaraka.albaraka.model.dto.operation.OperationCreateDTO;
 import com.albaraka.albaraka.model.dto.operation.OperationDTO;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,24 +37,44 @@ public class OperationServiceImpl implements OperationService {
         Operation operation = mapper.toEntity(dto);
 
         Account accountSource = accountRepository.findByUuid(dto.getAccountSourceUuid())
+                .orElse(null);
+
+        Account accountDestination = accountRepository.findByUuid(dto.getAccountDestinationUuid())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Le compte avec l'uuid '" + dto.getAccountSourceUuid() + "' n'existe pas !"
                 ));
-
-        Account accountDestination = accountRepository.findByUuid(dto.getAccountDestinationUuid())
-                .orElseGet(null);
 
         OperationStatus status = operation.getAmount().compareTo(BigDecimal.valueOf(10_000)) <= 0
                 ? OperationStatus.APPROVED
                 : OperationStatus.PENDING;
 
+
         operation.setStatus(status);
         operation.setAccountSource(accountSource);
         operation.setAccountDestination(accountDestination);
 
+        if (status.equals(OperationStatus.APPROVED)) {
+            operation.setExecutedAt(LocalDateTime.now());
+            operation.setValidatedAt(LocalDateTime.now());
+
+        }
+
         repository.save(operation);
-        operation.getAccountSource();
-        operation.getAccountDestination();
+        accountSource = operation.getAccountSource();
+        accountDestination = operation.getAccountDestination();
+
+        if (status.equals(OperationStatus.APPROVED)) {
+            accountDestination.setBalance(accountDestination.getBalance().add(operation.getAmount()));
+            accountRepository.save(accountDestination);
+            if (accountSource != null) {
+                if (accountSource.getBalance().compareTo(operation.getAmount()) < 0) {
+                    throw new InvalidRequestException("Solde insuffisant pour confirmer cette opération.");
+                }
+                accountSource.setBalance(accountSource.getBalance().subtract(operation.getAmount()));
+                accountRepository.save(accountSource);
+            }
+        }
+
 
         return mapper.toFindDto(operation);
     }
@@ -66,10 +88,24 @@ public class OperationServiceImpl implements OperationService {
                 ));
 
         operation.setStatus(status);
-
-        operation.getAccountSource();
-        operation.getAccountDestination();
+        Account accountSource = operation.getAccountSource();
+        Account accountDestination =operation.getAccountDestination();
         operation.getDocument();
+
+        if (status.equals(OperationStatus.APPROVED)) {
+            operation.setExecutedAt(LocalDateTime.now());
+            operation.setValidatedAt(LocalDateTime.now());
+            accountDestination.setBalance(accountDestination.getBalance().add(operation.getAmount()));
+            accountRepository.save(accountDestination);
+            if (accountSource != null) {
+                if (accountSource.getBalance().compareTo(operation.getAmount()) < 0) {
+                    throw new InvalidRequestException("Solde insuffisant pour confirmer cette opération.");
+                }
+                accountSource.setBalance(accountSource.getBalance().subtract(operation.getAmount()));
+                accountRepository.save(accountSource);
+            }
+        }
+
 
         return mapper.toFindDto(operation);
     }

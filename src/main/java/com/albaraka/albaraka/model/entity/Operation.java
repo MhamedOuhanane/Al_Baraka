@@ -44,7 +44,7 @@ public class Operation {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "validated_at")
+    @Column(name = "validated_at", nullable = true)
     private LocalDateTime validatedAt;
 
     @Column(name = "executed_at")

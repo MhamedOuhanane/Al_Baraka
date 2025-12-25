@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/document")
+@RequestMapping("/api/documents")
 @RequiredArgsConstructor
 public class DocumentController {
     private final FileStorageService fileStorageService;

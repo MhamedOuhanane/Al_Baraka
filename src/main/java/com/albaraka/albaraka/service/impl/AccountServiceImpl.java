@@ -35,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
                 + ThreadLocalRandom.current().nextLong(1_000_000_000L, 9_999_999_999L);
 
         account.setAccountNumber(accountNumber);
+        account.setUser(user);
 
         account = repository.save(account);
 
