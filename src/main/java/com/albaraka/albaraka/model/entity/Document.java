@@ -11,6 +11,7 @@ import java.util.UUID;
 @Table(name = "documents")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

@@ -1,13 +1,14 @@
 package com.albaraka.albaraka.model.mapper;
 
 import com.albaraka.albaraka.model.dto.document.DocumentDTO;
+import com.albaraka.albaraka.model.dto.document.DocumentDTO;
 import com.albaraka.albaraka.model.dto.document.DocumentFindDTO;
-import com.albaraka.albaraka.model.dto.operation.OperationDTO;
-import com.albaraka.albaraka.model.dto.operation.OperationFindDTO;
+import com.albaraka.albaraka.model.entity.Account;
 import com.albaraka.albaraka.model.entity.Document;
-import com.albaraka.albaraka.model.entity.Operation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface DocumentMapper {
@@ -18,4 +19,6 @@ public interface DocumentMapper {
     @Mapping(target = "uploadedAt", ignore = true)
     @Mapping(target = "operation", ignore = true)
     Document toEntity(DocumentDTO dto);
+
+    List<DocumentDTO> toDtos(List<Document> documents);
 }
