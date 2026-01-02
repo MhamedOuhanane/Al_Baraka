@@ -1,18 +1,26 @@
 spring.datasource.url=
 spring.datasource.username=
 spring.datasource.password=
-spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.driver-class-name=
+
 
 minio.url=
 minio.accessKey=
 minio.secretKey=
 minio.bucketName=
 
+
+spring.ai.openai.base-url=
+spring.ai.openai.api-key=
+spring.ai.openai.chat.options.model=
+
 security.jwt.secret=
+
 
 spring.security.oauth2.client.registration.google.client-id=
 spring.security.oauth2.client.registration.google.client-secret=
 spring.security.oauth2.client.registration.google.scope=
+
 
 spring.security.oauth2.client.registration.facebook.client-id=
 spring.security.oauth2.client.registration.facebook.client-secret=

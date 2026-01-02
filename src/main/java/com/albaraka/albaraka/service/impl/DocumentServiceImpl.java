@@ -7,14 +7,20 @@ import com.albaraka.albaraka.model.dto.document.DocumentDTO;
 import com.albaraka.albaraka.model.dto.document.DocumentFindDTO;
 import com.albaraka.albaraka.model.entity.Document;
 import com.albaraka.albaraka.model.entity.Operation;
+import com.albaraka.albaraka.model.enums.OperationStatus;
 import com.albaraka.albaraka.model.mapper.DocumentMapper;
 import com.albaraka.albaraka.repository.DocumentRepository;
 import com.albaraka.albaraka.repository.OperationRepository;
 import com.albaraka.albaraka.service.interfaces.DocumentService;
 import com.albaraka.albaraka.service.interfaces.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.chat.ChatClient;
+import org.springframework.ai.chat.messages.Media;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,6 +33,7 @@ public class DocumentServiceImpl implements DocumentService {
     private final DocumentMapper mapper;
     private final FileStorageService fileStorageService;
     private final OperationRepository operationRepository;
+    private final ChatClient chatClient;
 
     @Override
     @Transactional
@@ -35,6 +42,13 @@ public class DocumentServiceImpl implements DocumentService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "L'operation avec l'uuid '" + dto.getOperationUuid() + "' n'existe pas !"
                 ));
+
+        String aiStatus = analyzeDocument(file, operation.getAmount().doubleValue());
+        OperationStatus status = operation.getStatus() == OperationStatus.PENDING
+                ? aiStatus.equalsIgnoreCase("VALID")
+                        ? OperationStatus.APPROVED
+                        : OperationStatus.REJECTED
+                : operation.getStatus();
 
         if (!ownerUuid.equals(operation.getAccountDestination().getUser().getUuid())) {
             throw new AuthorizationException("Vous n'avez pas autorisation d'ajouter un document à cette opération !");
@@ -52,6 +66,8 @@ public class DocumentServiceImpl implements DocumentService {
         document.setStoragePath(storagePath);
 
         repository.save(document);
+        operation.setStatus(status);
+
 
         return mapper.toFindDto(document);
     }
@@ -73,5 +89,14 @@ public class DocumentServiceImpl implements DocumentService {
         var user = document.getOperation().getAccountDestination().getUser();
 
         return mapper.toFindDto(document);
+    }
+
+    private String analyzeDocument(MultipartFile file, Double amount) {
+        Media imageMedia = new Media(MimeTypeUtils.IMAGE_JPEG, file.getResource());
+
+        String promptText = "Vérifiez si le montant " + amount + " est sur ce document. Répondez VALID/INVALID.";
+        UserMessage userMessage = new UserMessage(promptText, List.of(imageMedia));
+
+        return chatClient.call(new Prompt(userMessage)).getResult().getOutput().getContent();
     }
 }
