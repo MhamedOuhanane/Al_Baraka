@@ -9,6 +9,7 @@ minio.accessKey=
 minio.secretKey=
 minio.bucketName=
 
+app.frontend.url=
 
 spring.ai.openai.base-url=
 spring.ai.openai.api-key=

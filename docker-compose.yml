@@ -30,12 +30,14 @@ services:
       - albaraka-network
 
   app:
-    build: .
+    image: ${DOCKERHUB_USERNAME}/albaraka-backend:latest
     container_name: albaraka-app
     restart: always
     depends_on:
-      - db
-      - minio
+      db:
+        condition: service_started
+      minio:
+        condition: service_started
     ports:
       - "8080:8080"
     environment:
