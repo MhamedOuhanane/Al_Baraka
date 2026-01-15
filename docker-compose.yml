@@ -45,10 +45,23 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/albaraka_db
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+
       - MINIO_URL=http://minio:9000
-      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
-      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
-      - MINIO_BUCKET_NAME=documents
+      - MINIO_ACCESSKEY=${MINIO_ROOT_USER}
+      - MINIO_SECRETKEY=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKETNAME=albaraka-bucket
+
+      - AI_OPENAI_API_KEY=${AI_OPENAI_API_KEY}
+
+      - JWT_SECRET=${JWT_SECRET}
+
+      - GOOGLE_ID=${GOOGLE_ID}
+      - GOOGLE_SECRET=${GOOGLE_SECRET}
+      - GOOGLE_SCOPE=${GOOGLE_SCOPE}
+
+      - FB_ID=${FB_ID}
+      - FB_SECRET=${FB_SECRET}
+      - FB_SCOPE=${FB_SCOPE}
     networks:
       - albaraka-network
 
